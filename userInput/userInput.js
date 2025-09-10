@@ -1,12 +1,11 @@
-const http = require("http");
 const fs = require("fs");
 
-const server = http.createServer((req, resp) => {
+const userHandler = (req, resp) => {
   if (req.url === "/") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<html>");
     resp.write("<head><title>User Form</title></head>");
-    resp.write('<body><form action="/submit" method="post">');
+    resp.write('<body><form action="/submit-data" method="post">');
     resp.write("<h2>Submit The Form</h2>");
     resp.write('<label for="name">Name:');
     resp.write(
@@ -26,7 +25,25 @@ const server = http.createServer((req, resp) => {
     resp.write("</form></body>");
     resp.write("</html>");
     return resp.end();
-  } else if (req.url === "/submit-data") {
+  } else if (req.url === "/submit-data" && req.method === "POST") {
+    const body = [];
+    req.on("data", (chunk) => {
+      console.log(chunk);
+      body.push(chunk);
+    });
+    req.on("end", () => {
+      const paresedBody = Buffer.concat(body).toString();
+      const params = new URLSearchParams(paresedBody);
+      // const bodyObj = {};
+      // for (const [key, value] of params) {
+      //   bodyObj[key] = value;
+      // }
+      // OR
+      const bodyObj = Object.fromEntries(params);
+      fs.writeFileSync("Hello.txt", JSON.stringify(bodyObj));
+      console.log(bodyObj);
+    });
+
     resp.setHeader("Content-Type", "text/html");
     resp.write("<html>");
     resp.write("<head><title>User Form</title></head>");
@@ -34,18 +51,7 @@ const server = http.createServer((req, resp) => {
     resp.write("<h3>Form Data Submitted Successfully!</h3>");
     resp.write("</body>");
     resp.write("</html>");
-  } else if (
-    req.url.toLocaleLowerCase() === "/submit" &&
-    req.method === "POST"
-  ) {
-    fs.writeFileSync("Hello.txt", "Rishabh Singh");
-    resp.statusCode = 302;
-    resp.setHeader("Location", "/");
-    return resp.end();
   }
-});
+};
 
-const port = 3000;
-server.listen(port, () => {
-  console.log(`The Server Is Running at http://localhost:${port}`);
-});
+module.exports = userHandler;

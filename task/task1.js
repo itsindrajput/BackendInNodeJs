@@ -11,22 +11,27 @@ const server = http.createServer((req, resp) => {
   if (req.url === "/home") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<h1>Welcome To Myntra</h1>");
+    resp.write("<a href='/back'>Go Back To Home</a>");
     return resp.end();
   } else if (req.url === "/men") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<h1>Welcome To Myntra -> Men Section</h1>");
+    resp.write("<a href='/back'>Go Back To Home</a>");
     return resp.end();
   } else if (req.url === "/women") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<h1>Welcome To Myntra -> Women Section</h1>");
+    resp.write("<a href='/back'>Go Back To Home</a>");
     return resp.end();
   } else if (req.url === "/kid") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<h1>Welcome To Myntra -> Kid Section</h1>");
+    resp.write("<a href='/back'>Go Back To Home</a>");
     return resp.end();
   } else if (req.url === "/cart") {
     resp.setHeader("Content-Type", "text/html");
     resp.write("<h1>Welcome To Cart Page</h1>");
+    resp.write("<a href='/back'>Go Back To Home</a>");
     return resp.end();
   }
 
